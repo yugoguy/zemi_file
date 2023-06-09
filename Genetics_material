@@ -1,0 +1,14 @@
+The link below includes all the file needed for statistical genetics textbook assignment
+https://drive.google.com/drive/folders/1AfVbKisZEF9H0ZbXSJd1lwwL-MTlgoJn?usp=sharing
+
+Contents in the link will be updated as zemi proceeds
+
+_environment.zip file contains everything needed to do the assignment on your own
+In terminal, change directory to this file and run the commands shown in the textbook
+
+_outputs.zip file contains all the results of the assignments if you are not doing it on your own
+In terminal, type in "head [directory_path]" to see the contents (just first 10 lines in the file) of the file
+[directory_path] is where you located the file you want to see
+Some files (.bin, .bed, so on) cannot be open in terminal
+
+Contact me for difficulty
