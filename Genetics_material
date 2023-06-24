@@ -22,56 +22,57 @@ For chapter 10 assignment explanation, go to line 77.
 CHAPTER 8 ASSIGNMENT
 
 EXERCISE 1:
-./plink --bfile ./hapmap_JPT_CHB_r23a --recode ped --out ped_recode
+      ./plink --bfile ./hapmap_JPT_CHB_r23a --recode ped --out ped_recode
 
 EXERCISE 2:
-./plink --bfile ./hapmap_JPT_CHB_r23a --freq --out Allele_Freq
-./plink --bfile ./hapmap_JPT_CHB_r23a --missing --out Missing
+      ./plink --bfile ./hapmap_JPT_CHB_r23a --freq --out Allele_Freq
+
+      ./plink --bfile ./hapmap_JPT_CHB_r23a --missing --out Missing
 
 EXERCISE 3:
-./plink --bfile ./hapmap_JPT_CHB_r23a --geno 0.05 --maf 0.03 --hwe 0.0001 --make-bed --out After_QC
+      ./plink --bfile ./hapmap_JPT_CHB_r23a --geno 0.05 --maf 0.03 --hwe 0.0001 --make-bed --out After_QC
 
 
 CHAPTER 9 ASSIGNMENT
 
 Page219 association analysis:
-./plink --bfile 1kg_EU_BMI --snps rs9674439 -- assoc --linear --out BMIrs9674439
+      ./plink --bfile 1kg_EU_BMI --snps rs9674439 -- assoc --linear --out BMIrs9674439
 
 Page219 logistic regression:
-./plink --bfile ./1kg_EU_Overweight --snps rs9674439 --assoc -- logistic --out Overweight_rs9674439
+      ./plink --bfile ./1kg_EU_Overweight --snps rs9674439 --assoc -- logistic --out Overweight_rs9674439
 
 Page221 linear regression for dominant allele:
-./plink --bfile ./1kg_EU_BMI --snps rs9674439 --assoc --linear dominant --out dom_BMIrs9674439
+      ./plink --bfile ./1kg_EU_BMI --snps rs9674439 --assoc --linear dominant --out dom_BMIrs9674439
 
 Page222 GWAS:
-./plink --bfile ./1kg_EU_BMI --assoc --linear --out BMIgwas
+      ./plink --bfile ./1kg_EU_BMI --assoc --linear --out BMIgwas
 
 Page224 Linked disequilibrium:
-./plink --bfile ./hapmap-ceu --ld rs2883059 rs2777888 --out ld_example
+      ./plink --bfile ./hapmap-ceu --ld rs2883059 rs2777888 --out ld_example
 
 Page225 LD pruning:
-./plink --bfile ./1kg_hm3_qc --maf 0.01 --indep-pairwise 50 5 0.2 --out 1kg_hm3_qc_pruned
+      ./plink --bfile ./1kg_hm3_qc --maf 0.01 --indep-pairwise 50 5 0.2 --out 1kg_hm3_qc_pruned
 
 Page226 Extracting pruned-in SNPs:
-./plink --bfile ./1kg_hm3_qc_pruned.prune.in --make-bed --out 1kg_hm3_prunedf
+      ./plink --bfile ./1kg_hm3_qc_pruned.prune.in --make-bed --out 1kg_hm3_prunedf
 
 Page228 PCA for population stratification:
-./plink --bfile ./1kg_hm3_prunedf --pca 10 --out 
+      ./plink --bfile ./1kg_hm3_prunedf --pca 10 --out 
 
 Page236 Identity by state (IBS) to identify related individuals:
-./plink --bfile ./1kg_hm3_prunedf --keep ./1kg_samples_EUR.txt -- distance --out ibs_matrix
+      ./plink --bfile ./1kg_hm3_prunedf --keep ./1kg_samples_EUR.txt -- distance --out ibs_matrix
 
 Page237 Genetic relatedness matrix (alternative measure for cryptic relatedness):
-./plink --bfile ./1kg_hm3_prunedf --keep ./1kg_samples_EUR.txt -- make-rel --out rel_matrix
+      ./plink --bfile ./1kg_hm3_prunedf --keep ./1kg_samples_EUR.txt -- make-rel --out rel_matrix
 
 Page238 GRM using GCTA (first step to calculate SNP-based heritability):
-./gcta64 --bfile ./1kg_EU_BMI --autosome --maf 0.01 --make-grm -- out 1kg_gcta
+      ./gcta64 --bfile ./1kg_EU_BMI --autosome --maf 0.01 --make-grm -- out 1kg_gcta
 
 Page239 Removing highly related individuals (second step to calculate SNP-based heritability):
-./gtca64 --grm ./1kg_gcta --grm-cutoff 0.025 --make-grm --out 1kg_rm025
+      ./gtca64 --grm ./1kg_gcta --grm-cutoff 0.025 --make-grm --out 1kg_rm025
 
 Page239 Calculating SNP-based heritability:
-./gcta64 --grm ./1kg_rm025 --pheno ./BMI_pheno.txt --reml --out 1kg_BMI_h2
+      ./gcta64 --grm ./1kg_rm025 --pheno ./BMI_pheno.txt --reml --out 1kg_BMI_h2
 
 
 CHAPTER 10 ASSIGNMENT [height, educational attainment, and age at menarche phenotype data is not available in the official website, so use BMI phenotype instead]
@@ -80,12 +81,18 @@ Before you run the commands and codes, make sure you can run R in the terminal a
 If you don't have R or Rstudio, get it from https://posit.co/download/rstudio-desktop/
 
 EXERCISE 1: 
-EXAMPLE 1: Rscript PRSice.R --dir . --prsice ./PRSice --base BMI.txt --target 1kg_hm3_qc --thread 1 --snp MarkerName --A1 A1 --A2 A2 --stat Beta --pvalue Pval --bar-levels 5e-08,5e-07,5e-06,5e-05,5e-04,5e-03,5e-02,5e-01 --fastscore --all-score --no-regress --binary-target F --out BMIscore_thresholds 
-  If you got error, try this: Rscript PRSice.R --dir . --prsice ./PRSice --base BMI.txt --target 1kg_hm3_qc --thread 1 --snp MarkerName --A1 A1 --A2 A2 --stat Beta --pvalue Pval --bar-levels 5e-08,5e-07,5e-06,5e-05,5e-04,5e-03,5e-02,5e-01 --fastscore --all-score --no-regress --binary-target F --out BMIscore_thresholds --extract BMIscore_thresholds.valid
-EXAMPLE 2: Rscript PRSice.R --dir . --prsice ./PRSice --base BMI.txt --target 1kg_hm3_qc --thread 1 --snp MarkerName --A1 A1 --A2 A2 --stat Beta --pvalue Pval --pheno-file BMI_pheno.txt --interval 0.00005 --lower 0.0001 --quantile 5 --all-score --binary-target F --out BMIscore_graphics
-  If you got error, try this: Rscript PRSice.R --dir . --prsice ./PRSice --base BMI.txt --target 1kg_hm3_qc --thread 1 --snp MarkerName --A1 A1 --A2 A2 --stat Beta --pvalue Pval --pheno-file BMI_pheno.txt --interval 0.00005 --lower 0.0001 --quantile 5 --all-score --binary-target F --out BMIscore_graphics --extract BMIscore_graphics.valid
-EXAMPLE 3: Rscript PRSice.R --dir . --prsice ./PRSice --base BMI.txt --target 1kg_hm3_qc --thread 1 --snp MarkerName --A1 A1 --A2 A2 --stat Beta --pvalue Pval --no-c lump F --pheno-file Obesity_pheno.txt --interval 0.00005 --lower 0.0001 --quantile 5 --all-score --binary-target T --out Obesity_score_graphics
-  If you got error, try this: Rscript PRSice.R --dir . --prsice ./PRSice --base BMI.txt --target 1kg_hm3_qc --thread 1 --snp MarkerName --A1 A1 --A2 A2 --stat Beta --pvalue Pval --no-c lump F --pheno-file Obesity_pheno.txt --interval 0.00005 --lower 0.0001 --quantile 5 --all-score --binary-target T --out Obesity_score_graphics --extract Obesity_score_graphics.valid
+EXAMPLE 1: 
+      Rscript PRSice.R --dir . --prsice ./PRSice --base BMI.txt --target 1kg_hm3_qc --thread 1 --snp MarkerName --A1 A1 --A2 A2 --stat Beta --pvalue Pval --bar-levels 5e-08,5e-07,5e-06,5e-05,5e-04,5e-03,5e-02,5e-01 --fastscore --all-score --no-regress --binary-target F --out BMIscore_thresholds 
+  If you got error, try this: 
+      Rscript PRSice.R --dir . --prsice ./PRSice --base BMI.txt --target 1kg_hm3_qc --thread 1 --snp MarkerName --A1 A1 --A2 A2 --stat Beta --pvalue Pval --bar-levels 5e-08,5e-07,5e-06,5e-05,5e-04,5e-03,5e-02,5e-01 --fastscore --all-score --no-regress --binary-target F --out BMIscore_thresholds --extract BMIscore_thresholds.valid
+EXAMPLE 2: 
+      Rscript PRSice.R --dir . --prsice ./PRSice --base BMI.txt --target 1kg_hm3_qc --thread 1 --snp MarkerName --A1 A1 --A2 A2 --stat Beta --pvalue Pval --pheno-file BMI_pheno.txt --interval 0.00005 --lower 0.0001 --quantile 5 --all-score --binary-target F --out BMIscore_graphics
+  If you got error, try this: 
+      Rscript PRSice.R --dir . --prsice ./PRSice --base BMI.txt --target 1kg_hm3_qc --thread 1 --snp MarkerName --A1 A1 --A2 A2 --stat Beta --pvalue Pval --pheno-file BMI_pheno.txt --interval 0.00005 --lower 0.0001 --quantile 5 --all-score --binary-target F --out BMIscore_graphics --extract BMIscore_graphics.valid
+EXAMPLE 3: 
+      Rscript PRSice.R --dir . --prsice ./PRSice --base BMI.txt --target 1kg_hm3_qc --thread 1 --snp MarkerName --A1 A1 --A2 A2 --stat Beta --pvalue Pval --no-c lump F --pheno-file Obesity_pheno.txt --interval 0.00005 --lower 0.0001 --quantile 5 --all-score --binary-target T --out Obesity_score_graphics
+  If you got error, try this: 
+      Rscript PRSice.R --dir . --prsice ./PRSice --base BMI.txt --target 1kg_hm3_qc --thread 1 --snp MarkerName --A1 A1 --A2 A2 --stat Beta --pvalue Pval --no-c lump F --pheno-file Obesity_pheno.txt --interval 0.00005 --lower 0.0001 --quantile 5 --all-score --binary-target T --out Obesity_score_graphics --extract Obesity_score_graphics.valid
 
 If you have trouble running Rscript in terminal, type in following in the terminal:
   conda list
