@@ -1,5 +1,7 @@
-The link below includes all the file needed for statistical genetics textbook assignment
+Textbook: An Introduction to Statistical Genetic Data Analysis (The MIT Press) by Melinda C. Mills, Nicola Barban, Felix C. Tropf
+The link below includes all the file needed for zemi assignments. 
 https://drive.google.com/drive/folders/1AfVbKisZEF9H0ZbXSJd1lwwL-MTlgoJn?usp=sharing
+Most data was available in the textbook's companion websites, but some were not. data files not available in the companion websites were replicated using available data or substituted using the GCTA simulation.
 
 Contents in the link will be updated as zemi proceeds
 
@@ -15,11 +17,12 @@ Following is the steps to use the _env file
 5. now you are in the _env file. 
    _env file contains all the software executor file and material files.
    run the code shown in the textbook. example code and command for each chapter is shown below.
-For chapter 8 assignment explanation, go to line 20.
-For chapter 9 assignemnt explanation, go to line 34.
-For chapter 10 assignment explanation, go to line 77.
+For chapter 8 assignment explanation, go to line 25.
+For chapter 9 assignemnt explanation, go to line 39.
+For chapter 10 assignment explanation, go to line 81.
 
-CHAPTER 8 ASSIGNMENT
+
+CHAPTER 8 ASSIGNMENT: do chapter 8 exercises 1, 2, and 3
 
 EXERCISE 1:
       ./plink --bfile ./hapmap_JPT_CHB_r23a --recode ped --out ped_recode
@@ -33,7 +36,7 @@ EXERCISE 3:
       ./plink --bfile ./hapmap_JPT_CHB_r23a --geno 0.05 --maf 0.03 --hwe 0.0001 --make-bed --out After_QC
 
 
-CHAPTER 9 ASSIGNMENT
+CHAPTER 9 ASSIGNMENT: reproduce the plink and gcta results in chapter 9
 
 Page219 association analysis:
       ./plink --bfile 1kg_EU_BMI --snps rs9674439 -- assoc --linear --out BMIrs9674439
@@ -75,7 +78,9 @@ Page239 Calculating SNP-based heritability:
       ./gcta64 --grm ./1kg_rm025 --pheno ./BMI_pheno.txt --reml --out 1kg_BMI_h2
 
 
-CHAPTER 10 ASSIGNMENT [height, educational attainment, and age at menarche phenotype data is not available in the official website, so use BMI phenotype instead]
+CHAPTER 10 ASSIGNMENT: do chapter 10 exercise 1, 2, and 3
+height, educational attainment, and age at menarche phenotype data is not available in the official website, so the codes below use BMI phenotype data instead. output from the code should be close to or same as the results shown in texbook. I did not try it, but maybe you can get the same results as the textbook if you use .best file instead of Pt_0.5 for PGS in R code. 
+If you want to try using height or educational attainment phenotype data, you can simulate the phenotype data using gcta (see appendix of the texbook). chapter10_extra contains data for height and educational attainment simulated by me. I am not sure if the analysis results using those simulated data is meaningful, so use it just for coding practice if you want to. 
 
 Before you run the commands and codes, make sure you can run R in the terminal and you have Rstudio in your computer
 If you don't have R or Rstudio, get it from https://posit.co/download/rstudio-desktop/
