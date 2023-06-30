@@ -80,7 +80,7 @@ Page239 Calculating SNP-based heritability:
 
 CHAPTER 10 ASSIGNMENT: do chapter 10 exercise 1, 2, and 3
 height, educational attainment, and age at menarche phenotype data is not available in the official website, so the codes below use BMI phenotype data instead. output from the code should be close to or same as the results shown in texbook. I did not try it, but maybe you can get the same results as the textbook if you use .best file instead of Pt_0.5 for PGS in R code. 
-If you want to try using height or educational attainment phenotype data, you can simulate the phenotype data using gcta (see appendix of the texbook). chapter10_extra contains data for height and educational attainment simulated by me. I am not sure if the analysis results using those simulated data is meaningful, so use it just for coding practice if you want to. 
+If you want to try using height or educational attainment phenotype data, you can simulate the phenotype data using gcta (see appendix of the texbook). chapter10_extra contains data for height and educational attainment simulated by me. I am not sure if the analysis results using those simulated data is meaningful (because technically same samples are used for GWAS and PGS), so use it just for coding practice if you want to. 
 
 Before you run the commands and codes, make sure you can run R in the terminal and you have Rstudio in your computer
 If you don't have R or Rstudio, get it from https://posit.co/download/rstudio-desktop/
@@ -163,3 +163,44 @@ scale_fill_manual(values = c("PGS_AFR" = "steelblue",
 "PGS_AMR" = "purple")) +
 theme_minimal()
 
+DATA PREPARATION BEFORE SIMULATION USING PYTHON: (using HEIGHT as example)
+# opening the file in read mode
+my_file = open("Giant_Height2018.txt", "r")
+  
+# reading the file
+data = my_file.read()
+  
+# replacing end splitting the text 
+# when newline ('\n') is seen.
+data_into_list = data.split("\n")
+#print(data_into_list)
+my_file.close()
+data1 = data_into_list
+
+listed = []
+for row in data1:
+    new = list(row.split("\t"))
+    listed.append(new)
+
+output = []
+for i, snp in enumerate(listed):
+    if i != 0:
+        if i != 2334002:
+            output.append([snp[2], snp[6]])
+
+#prepare a blank .txt file in jupyter notebook to write in. name of the file is your choice. 
+file_path = "snp-effect-height.txt"
+
+# Open the file in append mode
+with open(file_path, 'a') as file:
+    # Iterate over each element in the list
+    for item in output:
+        # Join the inner list elements with a tab separator
+        line = '\t'.join(item)
+        # Write the line to the file
+        file.write(line + '\n')
+
+SIMULATING PHENOTYPE USING GCTA: (usually takes around 1 hour.)
+      ./gcta64 --bfile 1kg_hm3_qc --simu-qt --simu-causal-loci snp-effect-height.txt --simu-hsq 0.8 --simu-rep 1 --out height_pheno_1 --thread-num 5
+Replace snp-effect-height.txt with the file you created from previous python code. Replace height_pheno_1 with the name of output file (phenotype file) that you prefer.
+After simulating, when you use this file in R, add the column names "FID      IID      Height" in the first column of the output file (.phen) by opening the file in Rstudio.
