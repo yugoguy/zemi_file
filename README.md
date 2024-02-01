@@ -1,4 +1,6 @@
-chY_package is the first try using ybrowse master file, but ybrowse master file also includes non-esential variants
+VCF_to_PhylotreeResult use mitocondria DNA to identify haplogroup from vcf file, using information from phylotree.
+
+chY_package is the first try using ybrowse master file, but ybrowse master file also includes non-esential variants.
 
 chY_package_renewed is the second try using ISOGG tree data. Similar package already exists, and ISOGG is not so frequently updated recently. It includes limited variants selected from strict selection criteria.
 
