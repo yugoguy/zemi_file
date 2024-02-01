@@ -1,0 +1,27 @@
+steps to use chY_package_yfull_version
+
+1. download chY_package_yfull_version.py, yfull_tree_info.sav, full_snps.sav
+2. locate files to where the program is executed
+    e.g. using terminal, cd [directory path to file with downloaded files]
+    e.g. locate downloaded files to same file as the python execution file in jupyter notebook
+3. import the package from chY_package_yfull_version using terminal or jupyter notebook
+    e.g. from chY_package_yfull_version import get_result
+4. run the function to get result, using vcf file as input
+    e.g. result = get_result(vcf_file_path)
+
+Note: 
+pandas, pickle, matplotlib_pyplot, numpy, networkx, json, requests should be installed by running "pip install package_name" in terminal if listed packages are not installed yet
+vct_file_path is the file path to vcf file to analyze. 
+vcf file should be formatted in following order: CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO
+By setting update=True in get_result function, it is possible to update all information although it is time-consuming
+
+The output of the get_result will include:
+1. number of variants matched for each haplogroup
+2. percentage of variants matched for each haplogroup
+3. scores of fit to each haplogroup
+4. path diagram showing which haplogroup is most likely
+5. YFull link for more information
+
+1,2,3 is shown as bar graph, where the clusters in the bar graph can be seen as haplogroups that the individual most likely belongs to.
+4 is shown as tree diagram, where longest path formable from matched haplogroups is shown in red. longest path can be seen as a haplogroup that the individual most likely belongs to.
+By viewing 5 (the link to YFull), it is possible to find out the region where the similar samples are from.
