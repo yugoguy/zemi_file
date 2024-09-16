@@ -1,0 +1,206 @@
+Textbook: An Introduction to Statistical Genetic Data Analysis (The MIT Press) by Melinda C. Mills, Nicola Barban, Felix C. Tropf
+The link below includes all the file needed for zemi assignments. 
+https://drive.google.com/drive/folders/1AfVbKisZEF9H0ZbXSJd1lwwL-MTlgoJn?usp=sharing
+Most data was available in the textbook's companion websites, but some were not. data files not available in the companion websites were replicated using available data or substituted using the GCTA simulation.
+
+Contents in the link will be updated as zemi proceeds
+
+Following is the steps to use the _env file
+
+1. if it is a .zip file, unzip the file
+2. move the unzipped file to Documents file (書類ファイル) in your computer
+3. open the terminal
+4. in the terminal, type in the following. _env is the unzipped file. 
+      cd Documents/_env
+   For example if you have chapter8_env file then type in:
+      cd Documents/chapter8_env
+5. now you are in the _env file. 
+   _env file contains all the software executor file and material files.
+   run the code shown in the textbook. example code and command for each chapter is shown below.
+For chapter 8 assignment explanation, go to line 25.
+For chapter 9 assignemnt explanation, go to line 39.
+For chapter 10 assignment explanation, go to line 81.
+
+
+CHAPTER 8 ASSIGNMENT: do chapter 8 exercises 1, 2, and 3
+
+EXERCISE 1:
+      ./plink --bfile ./hapmap_JPT_CHB_r23a --recode ped --out ped_recode
+
+EXERCISE 2:
+      ./plink --bfile ./hapmap_JPT_CHB_r23a --freq --out Allele_Freq
+
+      ./plink --bfile ./hapmap_JPT_CHB_r23a --missing --out Missing
+
+EXERCISE 3:
+      ./plink --bfile ./hapmap_JPT_CHB_r23a --geno 0.05 --maf 0.03 --hwe 0.0001 --make-bed --out After_QC
+
+
+CHAPTER 9 ASSIGNMENT: reproduce the plink and gcta results in chapter 9
+
+Page219 association analysis:
+      ./plink --bfile 1kg_EU_BMI --snps rs9674439 -- assoc --linear --out BMIrs9674439
+
+Page219 logistic regression:
+      ./plink --bfile ./1kg_EU_Overweight --snps rs9674439 --assoc -- logistic --out Overweight_rs9674439
+
+Page221 linear regression for dominant allele:
+      ./plink --bfile ./1kg_EU_BMI --snps rs9674439 --assoc --linear dominant --out dom_BMIrs9674439
+
+Page222 GWAS:
+      ./plink --bfile ./1kg_EU_BMI --assoc --linear --out BMIgwas
+
+Page224 Linked disequilibrium:
+      ./plink --bfile ./hapmap-ceu --ld rs2883059 rs2777888 --out ld_example
+
+Page225 LD pruning:
+      ./plink --bfile ./1kg_hm3_qc --maf 0.01 --indep-pairwise 50 5 0.2 --out 1kg_hm3_qc_pruned
+
+Page226 Extracting pruned-in SNPs:
+      ./plink --bfile ./1kg_hm3_qc_pruned.prune.in --make-bed --out 1kg_hm3_prunedf
+
+Page228 PCA for population stratification:
+      ./plink --bfile ./1kg_hm3_prunedf --pca 10 --out 
+
+Page236 Identity by state (IBS) to identify related individuals:
+      ./plink --bfile ./1kg_hm3_prunedf --keep ./1kg_samples_EUR.txt -- distance --out ibs_matrix
+
+Page237 Genetic relatedness matrix (alternative measure for cryptic relatedness):
+      ./plink --bfile ./1kg_hm3_prunedf --keep ./1kg_samples_EUR.txt -- make-rel --out rel_matrix
+
+Page238 GRM using GCTA (first step to calculate SNP-based heritability):
+      ./gcta64 --bfile ./1kg_EU_BMI --autosome --maf 0.01 --make-grm -- out 1kg_gcta
+
+Page239 Removing highly related individuals (second step to calculate SNP-based heritability):
+      ./gtca64 --grm ./1kg_gcta --grm-cutoff 0.025 --make-grm --out 1kg_rm025
+
+Page239 Calculating SNP-based heritability:
+      ./gcta64 --grm ./1kg_rm025 --pheno ./BMI_pheno.txt --reml --out 1kg_BMI_h2
+
+
+CHAPTER 10 ASSIGNMENT: do chapter 10 exercise 1, 2, and 3
+height, educational attainment, and age at menarche phenotype data is not available in the official website, so the codes below use BMI phenotype data instead. output from the code should be close to or same as the results shown in texbook. I did not try it, but maybe you can get the same results as the textbook if you use .best file instead of Pt_0.5 for PGS in R code. 
+If you want to try using height or educational attainment phenotype data, you can simulate the phenotype data using gcta (see appendix of the texbook). chapter10_extra contains data for height and educational attainment simulated by me. I am not sure if the analysis results using those simulated data is meaningful (because technically same samples are used for GWAS and PGS), so use it just for coding practice if you want to. 
+
+Before you run the commands and codes, make sure you can run R in the terminal and you have Rstudio in your computer
+If you don't have R or Rstudio, get it from https://posit.co/download/rstudio-desktop/
+
+EXERCISE 1: 
+EXAMPLE 1: 
+      Rscript PRSice.R --dir . --prsice ./PRSice --base BMI.txt --target 1kg_hm3_qc --thread 1 --snp MarkerName --A1 A1 --A2 A2 --stat Beta --pvalue Pval --bar-levels 5e-08,5e-07,5e-06,5e-05,5e-04,5e-03,5e-02,5e-01 --fastscore --all-score --no-regress --binary-target F --out BMIscore_thresholds 
+  If you got error, try this: 
+      Rscript PRSice.R --dir . --prsice ./PRSice --base BMI.txt --target 1kg_hm3_qc --thread 1 --snp MarkerName --A1 A1 --A2 A2 --stat Beta --pvalue Pval --bar-levels 5e-08,5e-07,5e-06,5e-05,5e-04,5e-03,5e-02,5e-01 --fastscore --all-score --no-regress --binary-target F --out BMIscore_thresholds --extract BMIscore_thresholds.valid
+EXAMPLE 2: 
+      Rscript PRSice.R --dir . --prsice ./PRSice --base BMI.txt --target 1kg_hm3_qc --thread 1 --snp MarkerName --A1 A1 --A2 A2 --stat Beta --pvalue Pval --pheno-file BMI_pheno.txt --interval 0.00005 --lower 0.0001 --quantile 5 --all-score --binary-target F --out BMIscore_graphics
+  If you got error, try this: 
+      Rscript PRSice.R --dir . --prsice ./PRSice --base BMI.txt --target 1kg_hm3_qc --thread 1 --snp MarkerName --A1 A1 --A2 A2 --stat Beta --pvalue Pval --pheno-file BMI_pheno.txt --interval 0.00005 --lower 0.0001 --quantile 5 --all-score --binary-target F --out BMIscore_graphics --extract BMIscore_graphics.valid
+EXAMPLE 3: 
+      Rscript PRSice.R --dir . --prsice ./PRSice --base BMI.txt --target 1kg_hm3_qc --thread 1 --snp MarkerName --A1 A1 --A2 A2 --stat Beta --pvalue Pval --no-c lump F --pheno-file Obesity_pheno.txt --interval 0.00005 --lower 0.0001 --quantile 5 --all-score --binary-target T --out Obesity_score_graphics
+  If you got error, try this: 
+      Rscript PRSice.R --dir . --prsice ./PRSice --base BMI.txt --target 1kg_hm3_qc --thread 1 --snp MarkerName --A1 A1 --A2 A2 --stat Beta --pvalue Pval --no-c lump F --pheno-file Obesity_pheno.txt --interval 0.00005 --lower 0.0001 --quantile 5 --all-score --binary-target T --out Obesity_score_graphics --extract Obesity_score_graphics.valid
+
+If you have trouble running Rscript in terminal, type in following in the terminal:
+  conda list
+It will show you all the packages your anaconda has. 
+If you see r-base in the list, type in the following to the terminal:
+  conda uninstall r-base
+If you don't see r-base in the list, type in the following to the terminal:
+  conda install r-base
+If you still have problem running Rscript in terminal, contact me.
+
+Now open Rstudio, and if you open it you should see files in the bottom right.
+That files should be the same with the files you see when you open jupyter notebook from Anaconda.
+You should find Documents file there, which is the file where _env file is. 
+Your _env file in should now contain the output files from exercise 1.
+Now run the following codes.
+
+EXERCISE 2: [summary(mod1) will output PGS regression model summary. summary(mod1)$r.square will output R^2 of the model. summary(mod2)$r.square will output the summary of PGS regression model with pca components. print(summary(mod2)$r.square-summary(mod2.no.pgs)$r.square) will output differencial R^2.]
+data <- read.table("~/Documents/chapter10_env/BMIscore_thresholds.all_score", header=T)
+pheno_BMI<-read.table("~/Documents/chapter10_env/BMI_pheno.txt", header=T)
+data.with.pheno<-merge(data,pheno_BMI, by="IID")
+data$PGS=(data$Pt_0.5-mean(data$Pt_0.5))/sd(data$Pt_0.5, na.rm=T)
+mod1<-(lm(BMI~data$PGS, data=data.with.pheno))
+summary(mod1)
+summary(mod1)$r.square
+
+columns=c("FID", "IID", "pca1", "pca2", "pca3", "pca4", "pca5", "pca6", "pca7", "pca8", "pca9", "pca10")
+pca<- read.table(file="~/Documents/chapter10_env/pca.eigenvec", sep = "", header=F, col.names=columns)[,c(2:12)]
+data.with.covars<-merge(data.with.pheno,pca, by="IID")
+mod2<-lm(BMI~data$PGS+pca1+pca2+pca3+pca3+pca5+pca6+pca7+pca8+pca9+pca10, data=data.with.covars)
+summary(mod2)$r.square
+mod2.no.pgs<-update(mod2,  ~ . - data$PGS)
+print(summary(mod2)$r.square-summary(mod2.no.pgs)$r.square)
+
+EXERCISE 3: [run the code per indentation. following code will output the overlapping histogram of PGS for each ancestry sub-population]
+data1 <- read.table("~/Documents/chapter10_env/BMIscore_thresholds.all_score", header=T)
+data1$PGS=(data1$Pt_0.5-mean(data1$Pt_0.5))/sd(data1$Pt_0.5, na.rm=T)
+geo<-read.table(file="~/Documents/chapter10_env/1kg_samples.txt", sep = "\t", header=T)[, c(1,4,5,6,7)]
+names(geo)[1]<-"IID"
+individuals_AFR <- geo$IID[geo$Superpopulation.code == "AFR"]
+individuals_EAS <- geo$IID[geo$Superpopulation.code == "EAS"]
+individuals_EUR <- geo$IID[geo$Superpopulation.code == "EUR"]
+individuals_AMR <- geo$IID[geo$Superpopulation.code == "AMR"]
+PGS_AFR <- data1$PGS[data1$IID %in% individuals_AFR]
+PGS_EAS <- data1$PGS[data1$IID %in% individuals_EAS]
+PGS_EUR <- data1$PGS[data1$IID %in% individuals_EUR]
+PGS_AMR <- data1$PGS[data1$IID %in% individuals_AMR]
+
+install.packages("ggplot2")
+
+library(ggplot2)
+
+combined_data <- data.frame(
+group = rep(c("PGS_AFR", "PGS_EAS", "PGS_EUR", "PGS_AMR"),
+times = c(length(PGS_AFR), length(PGS_EAS), length(PGS_EUR), length(PGS_AMR))),
+value = c(PGS_AFR, PGS_EAS, PGS_EUR, PGS_AMR)
+)
+ggplot(data = combined_data, aes(x = value, fill = group)) +
+geom_density(alpha = 0.5) +
+labs(x = "PGS", y = "Density") +
+scale_fill_manual(values = c("PGS_AFR" = "steelblue",
+"PGS_EAS" = "darkgreen",
+"PGS_EUR" = "orange",
+"PGS_AMR" = "purple")) +
+theme_minimal()
+
+DATA PREPARATION BEFORE SIMULATION USING PYTHON: (using HEIGHT as example)
+# opening the file in read mode
+my_file = open("Giant_Height2018.txt", "r")
+  
+# reading the file
+data = my_file.read()
+  
+# replacing end splitting the text 
+# when newline ('\n') is seen.
+data_into_list = data.split("\n")
+#print(data_into_list)
+my_file.close()
+data1 = data_into_list
+
+listed = []
+for row in data1:
+    new = list(row.split("\t"))
+    listed.append(new)
+
+output = []
+for i, snp in enumerate(listed):
+    if i != 0:
+        if i != 2334002:
+            output.append([snp[2], snp[6]])
+
+#prepare a blank .txt file in jupyter notebook to write in. name of the file is your choice. 
+file_path = "snp-effect-height.txt"
+
+# Open the file in append mode
+with open(file_path, 'a') as file:
+    # Iterate over each element in the list
+    for item in output:
+        # Join the inner list elements with a tab separator
+        line = '\t'.join(item)
+        # Write the line to the file
+        file.write(line + '\n')
+
+SIMULATING PHENOTYPE USING GCTA: (usually takes around 1 hour.)
+      ./gcta64 --bfile 1kg_hm3_qc --simu-qt --simu-causal-loci snp-effect-height.txt --simu-hsq 0.8 --simu-rep 1 --out height_pheno_1 --thread-num 5
+Replace snp-effect-height.txt with the file you created from previous python code. Replace height_pheno_1 with the name of output file (phenotype file) that you prefer.
+After simulating, when you use this file in R, add the column names "FID      IID      Height" in the first column of the output file (.phen) by opening the file in Rstudio.
