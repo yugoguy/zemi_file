@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simulation Results</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* (Styles remain the same) */
+    </style>
+</head>
+<body>
+
+<h2>Adjust Transparency Value</h2>
+<div class="slider-container">
+    <div class="slider-label">
+        <span>Transparency: <span id="transparencyValue">0.6</span></span>
+    </div>
+    <input type="range" id="transparencySlider" min="0" max="1" step="0.01" value="0.6">
+</div>
+<div class="button-container">
+    <button id="runSimulationButton">Run Simulation</button>
+</div>
+
+<h2>Simulation Results</h2>
+<p>Average Final Contribution: <span id="averageContribution">N/A</span></p>
+
+<canvas id="contributionChart" width="800" height="400"></canvas>
+
+<script>
+    var recordData = [];
+    var chartInitialized = false;
+    var contributionChart;
+
+    var ctx = document.getElementById('contributionChart').getContext('2d');
+
+    // Update the displayed transparency value when the slider is moved
+    var transparencySlider = document.getElementById('transparencySlider');
+    var transparencyValueDisplay = document.getElementById('transparencyValue');
+
+    transparencySlider.addEventListener('input', function() {
+        transparencyValueDisplay.textContent = transparencySlider.value;
+    });
+
+    // Handle the Run Simulation button click
+    document.getElementById('runSimulationButton').addEventListener('click', function() {
+        var transparency = parseFloat(transparencySlider.value);
+
+        // Send AJAX request to run the simulation
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'simulation.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+
+                // Update the average final contribution
+                document.getElementById('averageContribution').textContent = response.average_final_contribution;
+
+                // Update the chart
+                updateChart(response.record, response.N, response.E);
+            } else {
+                console.error('Error running simulation.');
+            }
+        };
+
+        xhr.send('ajax=1&transparency=' + encodeURIComponent(transparency));
+    });
+
+    function updateChart(data, N, E) {
+        var maxY = N * E; // Calculate N * E for y-axis max value
+
+        if (chartInitialized) {
+            // Update existing chart data and y-axis range
+            contributionChart.data.labels = Array.from({length: data.length}, (_, i) => i + 1);
+            contributionChart.data.datasets[0].data = data;
+            contributionChart.options.scales.y.min = 0;
+            contributionChart.options.scales.y.max = maxY;
+            contributionChart.update();
+        } else {
+            // Initialize the chart
+            contributionChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: data.length}, (_, i) => i + 1),
+                    datasets: [{
+                        label: 'Total Contribution Over Time',
+                        data: data,
+                        borderColor: 'rgba(196, 181, 253, 1)', // Light purple color
+                        fill: false,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Round Number'
+                            }
+                        },
+                        y: {
+                            display: true,
+                            min: 0,       // Set y-axis minimum value
+                            max: maxY,    // Set y-axis maximum value
+                            title: {
+                                display: true,
+                                text: 'Total Contribution'
+                            }
+                        }
+                    }
+                }
+            });
+            chartInitialized = true;
+        }
+    }
+</script>
+
+</body>
+</html>
