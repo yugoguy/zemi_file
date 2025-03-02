@@ -18,4 +18,4 @@ Try to see if the inclusion of the non-fungible-token incentive reward increases
 The academic references for this model is included in the following document along with the detailed design explanation:  https://docs.google.com/document/d/19srS3kCm0jyV-zgT1F8FQnRlNiIriX90F-OUcGk9sWA/edit?tab=t.0#heading=h.lljtwv4lt9j1
 
 ## CONTACT
-For any inquiries, please contact fukuhara.zemi@gmail.com.
+For any inquiries, please contact fukuhara.zemi@gmail.com or nagatakeyugo@gmail.com.
